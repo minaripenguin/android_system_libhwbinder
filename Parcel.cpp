@@ -850,6 +850,11 @@ status_t Parcel::writeNativeHandleNoDup(const native_handle_t *handle,
         return status;
     }
 
+    if (handle->numFds < 0 || handle->numInts < 0) {
+        status = writeUint64(0);
+        return status;
+    }
+
     size_t native_handle_size = sizeof(native_handle_t)
                 + handle->numFds * sizeof(int) + handle->numInts * sizeof(int);
     writeUint64(native_handle_size);
